@@ -6,20 +6,16 @@ require "transaction_tracking"
 
 Dir.glob("packs/protocols/**/initializer.rb").each { |f| require_relative(f) }
 
-tx_hash = "0xabc"
+# Simulating a database of transactions
+database = [
+  { tx_hash: "0xabc", status: nil, protocol: :ethereum },
+  { tx_hash: "solana-tx-hash", status: nil, protocol: :solana },
+]
 
-puts "[TRACKING] Starting to monitor #{tx_hash}..."
-TransactionTracking.track(protocol: :ethereum, tx_hash:) do |new_status|
-  puts "[TRACKING] Status updated to: #{new_status}"
-end
-
-# For a new protocol, we just need to implement:
-# * transaction_tracker class
-# * initializer to add ^ to registry
-
-tx_hash = "solana-hash"
-
-puts "[TRACKING] Starting to monitor #{tx_hash}..."
-TransactionTracking.track(protocol: :solana, tx_hash:) do |new_status|
-  puts "[TRACKING] Status updated to: #{new_status}"
+# Simulating a scheduled job to check for transactions that need to be monitored
+database.select { |tx| tx[:status].nil? }.each do |tx|
+  puts "[TRACKING] Starting to monitor #{tx[:tx_hash]}..."
+  TransactionTracking.track(protocol: tx[:protocol], tx_hash: tx[:tx_hash]) do |new_status|
+    puts "[TRACKING] Status updated to: #{new_status}"
+  end
 end
