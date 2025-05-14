@@ -20,7 +20,12 @@ trackers = {
 # Simulating a scheduled job to check for transactions that need to be monitored
 database.select { |tx| tx[:status].nil? }.each do |tx|
   puts "[TRACKING] Starting to monitor #{tx[:tx_hash]}..."
-  TransactionTracking.track(tracker: trackers[tx[:protocol]].new, tx_hash: tx[:tx_hash]) do |new_status|
+
+  # We could use a factory method here, or a convention for what these classes should be called
+  # For now, I just set up the hash above
+  tracker = trackers[tx[:protocol]].new
+
+  TransactionTracking.track(tracker: , tx_hash: tx[:tx_hash]) do |new_status|
     puts "[TRACKING] Status updated to: #{new_status}"
   end
 end
