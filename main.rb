@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(File.expand_path("support", __dir__))
 
 require "transaction_tracking"
 
-Dir.glob("packs/protocols/**/initializer.rb").each { |f| require_relative(f) }
+Dir.glob("packs/protocols/**/*.rb").each { |f| require_relative(f) }
 
 # Simulating a database of transactions
 database = [
@@ -12,10 +12,15 @@ database = [
   { tx_hash: "solana-tx-hash", status: nil, protocol: :solana },
 ]
 
+trackers = {
+  ethereum: Ethereum::TransactionTracker,
+  solana: Solana::TransactionTracker
+}
+
 # Simulating a scheduled job to check for transactions that need to be monitored
 database.select { |tx| tx[:status].nil? }.each do |tx|
   puts "[TRACKING] Starting to monitor #{tx[:tx_hash]}..."
-  TransactionTracking.track(protocol: tx[:protocol], tx_hash: tx[:tx_hash]) do |new_status|
+  TransactionTracking.track(tracker: trackers[tx[:protocol]].new, tx_hash: tx[:tx_hash]) do |new_status|
     puts "[TRACKING] Status updated to: #{new_status}"
   end
 end

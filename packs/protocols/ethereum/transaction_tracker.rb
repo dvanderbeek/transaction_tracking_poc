@@ -1,11 +1,9 @@
-require_relative "../../features/transaction_tracking/interfaces/transaction_status_fetcher"
+require_relative "../../features/transaction_tracking/tracker"
 require_relative "../../features/transaction_tracking/status"
 require_relative "support/fake_rpc"
 
 module Ethereum
-  class TransactionTracker
-    include TransactionTracking::Interfaces::TransactionStatusFetcher
-
+  class TransactionTracker < TransactionTracking::Tracker
     # Maps an Ethereum-specific transaction status (from RPC or indexer)
     # to a standardized, canonical status defined in TransactionTracking::Status.
     #
