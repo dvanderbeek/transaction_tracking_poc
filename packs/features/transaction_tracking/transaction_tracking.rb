@@ -4,7 +4,9 @@ module TransactionTracking
   extend self
 
   # This represents the public API for TransactionTracking
-  def track(tracker:, tx_hash:, &block)
+  def track(protocol:, tx_hash:, &block)
+    tracker = Tracker.for(protocol).new
+
     loop do
       status = tracker.status_for(tx_hash)
       if status.terminal?
@@ -13,5 +15,7 @@ module TransactionTracking
       end
       sleep 1
     end
+  rescue NameError
+    puts "Transaction Tracking not implemented for #{protocol}"
   end
 end
