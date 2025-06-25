@@ -17,8 +17,8 @@ module Ethereum
       #   - :replaced (not used in Ethereum)
       #
       # @raise [RuntimeError] if the raw status cannot be mapped
-      def status_for(tx_hash)
-        case raw_status_for(tx_hash)
+      def status_for(transaction)
+        case raw_status_for(transaction.tx_hash)
         when "pending", "0"
           ::TransactionTracking::Status::PENDING
         when "1", "confirmed", "success"
@@ -28,7 +28,7 @@ module Ethereum
         when "not_found", "dropped"
           ::TransactionTracking::Status::DROPPED
         else
-          raise "Unknown Ethereum tx status: #{raw_status_for(tx_hash).inspect}"
+          raise "Unknown Ethereum tx status: #{raw_status_for(transaction.tx_hash).inspect}"
         end
       end
 
