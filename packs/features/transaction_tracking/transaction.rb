@@ -21,20 +21,19 @@ module TransactionTracking
 
     def track(&block)
       loop do
-        status = tracker.status_for(self)
-        self.status = status
+        self.status = tracker.status_for(self)
         if status.terminal?
           block.call(status) if block_given?
           break
         end
         sleep 1
       end
+    rescue NameError
+      puts "Transaction Tracking not implemented for #{protocol}"
     end
 
     def tracker
       Tracker.for(protocol).new
-    rescue NameError
-      puts "Transaction Tracking not implemented for #{protocol}"
     end
   end
 end
