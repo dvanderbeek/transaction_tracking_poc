@@ -1,7 +1,7 @@
 require_relative "status"
 
 module TransactionTracking
-  class Tracker
+  module Tracker
     def self.for(protocol)
       name = "#{protocol.capitalize}::TransactionTracking::Tracker"
       Object.const_get(name)

@@ -4,7 +4,8 @@ require_relative "../support/fake_rpc"
 
 module Ethereum
   module TransactionTracking
-    class Tracker < ::TransactionTracking::Tracker
+    class Tracker
+      include ::TransactionTracking::Tracker
       # Maps an Ethereum-specific transaction status (from RPC or indexer)
       # to a standardized, canonical status defined in TransactionTracking::Status.
       #
