@@ -19,10 +19,10 @@ Dir.glob("packs/protocols/**/*.rb").each { |f| require_relative(f) }
 end
 
 # Simulating a scheduled job to check for transactions that need to be monitored
-TransactionTracking::Transaction::DATABASE.select { |tx| tx.status.nil? }.each do |tx|
+TransactionTracking::Transaction.select { |tx| tx.status.nil? }.each do |tx|
   puts "[TRACKING] Starting to monitor #{tx.tx_hash}..."
 
-  TransactionTracking.track(transaction: tx) do |new_status|
+  tx.track do |new_status|
     puts "[TRACKING] Status updated to: #{new_status}"
   end
 end
