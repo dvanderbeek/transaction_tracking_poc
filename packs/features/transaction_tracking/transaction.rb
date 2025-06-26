@@ -24,7 +24,7 @@ module TransactionTracking
         status = tracker.status_for(self)
         self.status = status
         if status.terminal?
-          block.call(status)
+          block.call(status) if block_given?
           break
         end
         sleep 1
