@@ -8,7 +8,7 @@ module Ethereum
       # Maps an Ethereum-specific transaction status (from RPC or indexer)
       # to a standardized, canonical status defined in TransactionTracking::Status.
       #
-      # @param tx_hash [String] the transaction hash to look up
+      # @param transaction [TransactionTracking::Transaction] the transaction to look up
       # @return [Symbol] one of {TransactionTracking::Status}
       #   - :pending
       #   - :confirmed
