@@ -6,20 +6,20 @@ require "transaction_tracking"
 
 Dir.glob("packs/protocols/**/*.rb").each { |f| require_relative(f) }
 
-# Simulating a database of transactions
-database = []
-
+# These records would be getting created in the protocol packs
+# so Near would be hte only place that needs to be aware that it has to provide
+# account_address in the details json
 [
   { tx_hash: "0xabc", status: nil, protocol: :ethereum },
   { tx_hash: "solana-tx-hash", status: nil, protocol: :solana },
   { tx_hash: "cosmos-tx-hash", status: nil, protocol: :cosmos },
   { tx_hash: "near-tx-hash", status: nil, protocol: :near, details: { account_address: "address-123" } },
 ].each do |attrs|
-  TransactionTracking.create(database, attrs)
+  TransactionTracking::Transaction.create(attrs)
 end
 
 # Simulating a scheduled job to check for transactions that need to be monitored
-database.select { |tx| tx.status.nil? }.each do |tx|
+TransactionTracking::Transaction::DATABASE.select { |tx| tx.status.nil? }.each do |tx|
   puts "[TRACKING] Starting to monitor #{tx.tx_hash}..."
 
   TransactionTracking.track(transaction: tx) do |new_status|

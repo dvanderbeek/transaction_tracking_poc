@@ -4,10 +4,6 @@ require_relative "transaction"
 module TransactionTracking
   extend self
 
-  def create(db, attrs)
-    db << Transaction.new(attrs)
-  end
-
   # This represents the public API for TransactionTracking
   def track(transaction:, &block)
     protocol = transaction.protocol
