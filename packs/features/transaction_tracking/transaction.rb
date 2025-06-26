@@ -23,7 +23,7 @@ module TransactionTracking
       loop do
         self.status = tracker.status_for(self)
         if status.terminal?
-          block.call(status) if block_given?
+          block.call(status) if block_given? # Using a block as a callback here, but we would probably do something like the `.confirm!` method or emit an event
           break
         end
         sleep 1
