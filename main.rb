@@ -7,8 +7,8 @@ require "transaction_tracking"
 Dir.glob("packs/protocols/**/*.rb").each { |f| require_relative(f) }
 
 # These records would be getting created in the protocol packs
-# so Near would be hte only place that needs to be aware that it has to provide
-# account_address in the details json
+# so for example Near would be the only place that's aware that
+# account_address is needed in the details json
 [
   { tx_hash: "0xabc", status: nil, protocol: :ethereum },
   { tx_hash: "solana-tx-hash", status: nil, protocol: :solana },
